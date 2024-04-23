@@ -1,0 +1,62 @@
+# export CUDA_LAUNCH_BLOCKING="1"
+# export CUDA_VISIBLE_DEVICES="0,1,2,3"
+export TOKENIZERS_PARALLELISM="0"
+export PYTHONWARNINGS="ignore"
+export MODEL_SAVE_REPO='Gunulhona/S2S_LLM'
+export HUGGINGFACE_AUTO_TOKEN='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' 
+
+EXECUTEFILE="colossal/train.py"                             # needs custom trainer path
+EPOCHS=-1                                                   # type=int               default=2
+TQDM_RATE=5000                                              # type=int               default=2000
+LEARNING_RATE=5e-5                                          # type=float             default=1e-3
+STRATEGY="deepspeed"                                        # type=str               default='ddp'               choices=['ddp', 'colossal', 'deepspeed']
+ACCELERATOR="gpu"                                           # type=str               default=gpu
+NP=-1                                                       # type=int               default=1
+BATCHSIZE=1                                                 # type=int               default=1
+MODEL_NAME="s2s_9.2B" #'s2s_2.5B'                           # type=str               default='gpt2_xl'           choices=['gpt2_tiny'~'gpt2_xl'~'gpt3']
+STEPS_PER_EPOCH=4                                           # type=int               default=4
+NAC=false                                                   # type=bool              default=False               action='store_true'
+OFFLOAD=false                                               # type=bool              default=False               action='store_true'
+OPT_NVME_OFFLAND_FRAC=0.0                                   # type=float             default=0.0
+OPT_NVME_OFFLAND_DIR='/data/opt/'                           # type=str               default='/data/opt'
+SEQ_LEN=1024                                                # type=int               default=1024
+PLACEMENT_POLICY='cuda'                                     # type=str               defualt='cuda'
+OPT_GPU_MARGIN_RAT=0.0                                      # type=float             defualt=0.0
+CUDA_MEMORY_FRAC=1.0                                        # type=float             defualt=1.0
+MODEL_ZERO_CKPT_DIR='/data/llm_checkpoint/last.ckpt'        # type=str               default=None
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/ubuntu/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/ubuntu/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/ubuntu/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/ubuntu/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+conda activate nlp_env
+
+python $EXECUTEFILE\
+  --tqdm_rate $TQDM_RATE\
+  --model $MODEL_NAME\
+  --epochs $EPOCHS\
+  --steps_per_epoch $STEPS_PER_EPOCH\
+  --batch_size $BATCHSIZE\
+  --seq_len $SEQ_LEN\
+  --cuda_mem_frac $CUDA_MEMORY_FRAC\
+  --np $NP\
+  --strategy $STRATEGY\
+  --placement_policy $PLACEMENT_POLICY\
+  --lr $LEARNING_RATE \
+  --no_activation_ckpt\
+  --offload\
+  --opt_nvme_offload_frac $OPT_NVME_OFFLAND_FRAC\
+  --opt_nvme_offload_dir $OPT_NVME_OFFLAND_DIR\
+  --opt_gpu_margin_rat $OPT_GPU_MARGIN_RAT\
+  --model_zero_ckpt_dir $MODEL_ZERO_CKPT_DIR
+  

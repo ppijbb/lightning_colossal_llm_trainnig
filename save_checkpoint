@@ -1,0 +1,27 @@
+# export CUDA_LAUNCH_BLOCKING="1"
+# export CUDA_VISIBLE_DEVICES="0,1,2,3"
+export TOKENIZERS_PARALLELISM="0"
+export PYTHONWARNINGS="ignore"
+export MODEL_SAVE_REPO='Gunulhona/S2S_LLM'
+export HUGGINGFACE_AUTO_TOKEN='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' 
+
+EXECUTEFILE="colossal/save_checkpoint.py"        # needs custom trainer path
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/ubuntu/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/ubuntu/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/ubuntu/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/ubuntu/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+conda deactivate
+conda activate nlp_env
+
+python $EXECUTEFILE

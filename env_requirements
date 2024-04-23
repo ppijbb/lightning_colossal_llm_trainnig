@@ -1,0 +1,6 @@
+# Python 3.8.5
+# torch 1.13.1+cu116(cuda 11.6)
+
+CUDA_EXT=1  \
+DS_BUILD_OPS=1 \
+pip install deepspeed colossalai transformers
