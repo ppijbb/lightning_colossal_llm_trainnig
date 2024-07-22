@@ -3,7 +3,7 @@
 export TOKENIZERS_PARALLELISM="0"
 export PYTHONWARNINGS="ignore"
 export MODEL_SAVE_REPO='Gunulhona/S2S_LLM'
-export HUGGINGFACE_AUTO_TOKEN='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' 
+export HUGGINGFACE_AUTO_TOKEN='write your token' 
 
 EXECUTEFILE="colossal/train.py"                             # needs custom trainer path
 EPOCHS=-1                                                   # type=int               default=2
